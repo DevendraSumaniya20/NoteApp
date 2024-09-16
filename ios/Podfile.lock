@@ -1501,6 +1501,8 @@ PODS:
     - React-utils (= 0.75.3)
   - RNCMaskedView (0.3.1):
     - React-Core
+  - RNDeviceInfo (13.0.0):
+    - React-Core
   - RNGestureHandler (2.19.0):
     - DoubleConversion
     - glog
@@ -1522,6 +1524,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNPermissions (4.1.5):
+    - React-Core
   - RNScreens (3.34.0):
     - DoubleConversion
     - glog
@@ -1613,7 +1617,9 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1749,8 +1755,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -1820,7 +1830,9 @@ SPEC CHECKSUMS:
   ReactCodegen: ff95a93d5ab5d9b2551571886271478eaa168565
   ReactCommon: 289214026502e6a93484f4a46bcc0efa4f3f2864
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
+  RNDeviceInfo: 55264dd7cc939dad6e9c231a7621311f5277f1dc
   RNGestureHandler: 3b6fa2bfa341c413d3d08444b838515b58e48ee7
+  RNPermissions: 294531ede5a64d1528463e88fffef05675842042
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 1354c027ab07c7736f99a3bef16172d6f1b12b47
