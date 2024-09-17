@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View, StatusBar} from 'react-native';
 import React, {useEffect} from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 import {RootNavigationProps} from '../../navigation/AppNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {
@@ -7,6 +8,7 @@ import {
   moderateScale,
   moderateWidth,
 } from '../../utils/responsive';
+import colors from '../../theme/colors';
 
 interface SplashScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'Splash'>;
@@ -15,21 +17,30 @@ interface SplashScreenProps {
 const Splash = ({navigation}: SplashScreenProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Home');
+      navigation.replace('Login');
     }, 1500);
 
     return () => clearTimeout(timer);
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+    <LinearGradient
+      colors={[
+        colors.backgroundWhite,
+        colors.primaryGradientEnd,
+        colors.primaryGradientStart,
+      ]}
+      style={styles.container}>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={colors.primaryGradientStart}
+      />
       <View style={styles.logoContainer}>
         <Text style={styles.logoText}>📝</Text>
       </View>
       <Text style={styles.title}>Welcome to Note App</Text>
       <Text style={styles.subtitle}>Your personal note-taking assistant</Text>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -40,42 +51,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff', // White background for a clean look
-    padding: moderateWidth(20), // Add padding to avoid content sticking to the edges
   },
   logoContainer: {
-    width: moderateScale(140), // Slightly larger logo for more impact
+    width: moderateScale(140),
     height: moderateScale(140),
     borderRadius: moderateScale(70),
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.primaryGradientEnd,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: moderateHeight(30),
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: moderateHeight(15)},
-    shadowOpacity: 0.3,
-    shadowRadius: moderateScale(20),
-    elevation: 12,
     borderWidth: moderateScale(2),
-    borderColor: '#ffffff', // White border to add a subtle contrast
+    borderColor: colors.backgroundWhite,
   },
   logoText: {
-    fontSize: moderateScale(60), // Larger font size for better visibility
-    color: '#ffffff',
+    fontSize: moderateScale(60),
+    color: colors.backgroundWhite,
+    textShadowColor: colors.textShadow,
+    textShadowOffset: {width: 0, height: moderateScale(2)},
+    textShadowRadius: moderateScale(5),
   },
   title: {
-    fontSize: moderateScale(32),
-    fontWeight: '800', // Bolder font for emphasis
-    color: '#333',
-    marginBottom: moderateHeight(10),
+    fontSize: moderateScale(26),
+    fontWeight: '700',
+    color: colors.backgroundWhite,
     textAlign: 'center',
-    letterSpacing: moderateScale(1.5),
+    marginVertical: moderateHeight(8),
+    textShadowColor: colors.textShadow,
+    textShadowOffset: {width: 0, height: moderateScale(2)},
+    textShadowRadius: moderateScale(4),
   },
   subtitle: {
-    fontSize: moderateScale(20),
-    color: '#666',
+    fontSize: moderateScale(18),
+    color: colors.backgroundWhite,
     textAlign: 'center',
     marginHorizontal: moderateWidth(20),
-    lineHeight: moderateScale(24),
+    lineHeight: moderateScale(22),
+    textShadowColor: colors.textShadow,
+    textShadowOffset: {width: 0, height: moderateScale(2)},
+    textShadowRadius: moderateScale(4),
   },
 });
