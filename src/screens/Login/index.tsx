@@ -1,63 +1,77 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  StatusBar,
-} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationProps} from '../../navigation/AppNavigator';
-import {
-  moderateHeight,
-  moderateScale,
-  moderateWidth,
-} from '../../utils/responsive';
+import {moderateHeight, moderateScale} from '../../utils/responsive';
 import colors from '../../theme/colors';
-import {CustomInput, CustomText} from '../../components';
+import {CustomButton, CustomInput, CustomText} from '../../components';
+import {Text} from 'react-native';
 
 interface LoginScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'Login'>;
 }
 
-const Login = ({navigation}: LoginScreenProps) => {
+const Login: React.FC<LoginScreenProps> = ({navigation}) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const isButtonDisabled = !(email && password);
+
   return (
     <LinearGradient
-      colors={[
-        colors.backgroundWhite,
-        colors.primaryGradientEnd,
-        colors.primaryGradientStart,
-      ]}
+      colors={[colors.neonBlue, colors.neonRed]}
       style={styles.container}>
-      <View>
+      <View style={styles.innerContainer}>
         <CustomText
           text="Login"
           containerStyle={styles.loginTextContainer}
           textStyle={styles.loginText}
         />
-      </View>
-      <View style={styles.inputContainer}>
-        <CustomInput
-          placeholder="Enter Email "
-          autoFocus={true}
-          keyboardType="email-address"
-          onChangeText={text => console.log(text)}
-          placeholderTextColor={colors.white}
-          // value=""
-        />
 
-        <CustomInput
-          placeholder="Enter Password"
-          rightIcon="eye-outline"
-          rightIconType="Ionicons"
-          color={colors.white}
-          keyboardType="default"
-          onChangeText={text => console.log(text)}
-          secureTextEntry
-          placeholderTextColor={colors.white}
-        />
+        <View style={styles.inputContainer}>
+          <CustomInput
+            placeholder="Enter Email"
+            autoFocus={true}
+            keyboardType="email-address"
+            onChangeText={(text: string) => setEmail(text)}
+            placeholderTextColor={colors.white}
+          />
+          <CustomInput
+            placeholder="Enter Password"
+            rightIcon="eye-outline"
+            rightIconType="Ionicons"
+            color={colors.white}
+            keyboardType="default"
+            onChangeText={(text: string) => setPassword(text)}
+            secureTextEntry
+            placeholderTextColor={colors.white}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Login"
+            onPress={() => console.log('Login Button Pressed')}
+            disabled={isButtonDisabled}
+          />
+        </View>
+
+        <View style={styles.forgotPasswordContainer}>
+          <CustomText
+            text="Forgot Password ?"
+            textStyle={styles.forgotPasswordText}
+            pressable
+            onPress={() => console.log('Forgot Password Pressed')}
+          />
+        </View>
+
+        <View style={styles.signUpContainer}>
+          <Text style={styles.accountText}>Don't have an account?</Text>
+          <TouchableOpacity onPress={() => {}} style={styles.signUpButton}>
+            <Text style={styles.signUpButtonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </LinearGradient>
   );
@@ -69,31 +83,57 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: moderateScale(16),
+  },
   loginTextContainer: {
-    marginTop: moderateHeight(16),
     alignItems: 'center',
   },
   loginText: {
     fontSize: moderateScale(24),
     fontWeight: '700',
-    color: colors.backgroundWhite,
-    textShadowColor: colors.textShadow,
+    color: colors.white,
+    textShadowColor: colors.primaryDark,
     textShadowOffset: {width: 0, height: moderateScale(2)},
     textShadowRadius: moderateScale(4),
-    lineHeight: moderateHeight(4),
   },
   inputContainer: {
+    marginVertical: moderateScale(16),
+    gap: 26,
+  },
+  buttonContainer: {
     alignItems: 'center',
-    marginTop: moderateHeight(16),
-    gap: 30,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.0,
-
-    elevation: 24,
+    marginVertical: moderateScale(16),
+  },
+  forgotPasswordContainer: {
+    alignItems: 'flex-end',
+    marginVertical: moderateScale(16),
+  },
+  forgotPasswordText: {
+    fontSize: moderateScale(14),
+    fontWeight: '400',
+    color: colors.white,
+    textShadowColor: colors.lightGray_80,
+    textShadowOffset: {width: 0, height: moderateScale(2)},
+    textShadowRadius: moderateScale(4),
+  },
+  signUpContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    marginVertical: moderateHeight(8),
+  },
+  accountText: {
+    fontSize: moderateScale(16),
+    color: colors.white,
+  },
+  signUpButton: {},
+  signUpButtonText: {
+    color: colors.lavender,
+    fontSize: moderateScale(16),
+    fontWeight: 'bold',
   },
 });

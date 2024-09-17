@@ -25,16 +25,8 @@ const Splash = ({navigation}: SplashScreenProps) => {
 
   return (
     <LinearGradient
-      colors={[
-        colors.backgroundWhite,
-        colors.primaryGradientEnd,
-        colors.primaryGradientStart,
-      ]}
+      colors={[colors.neonBlue, colors.neonRed]}
       style={styles.container}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={colors.primaryGradientStart}
-      />
       <View style={styles.logoContainer}>
         <Text style={styles.logoText}>📝</Text>
       </View>
@@ -56,37 +48,36 @@ const styles = StyleSheet.create({
     width: moderateScale(140),
     height: moderateScale(140),
     borderRadius: moderateScale(70),
-    backgroundColor: colors.primaryGradientEnd,
+    backgroundColor: colors.neonRed_80,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: moderateHeight(30),
     borderWidth: moderateScale(2),
-    borderColor: colors.backgroundWhite,
+    borderColor: colors.white,
   },
   logoText: {
     fontSize: moderateScale(60),
-    color: colors.backgroundWhite,
-    textShadowColor: colors.textShadow,
+    color: colors.pastelGreen,
+    textShadowColor: colors.hotPink_60,
     textShadowOffset: {width: 0, height: moderateScale(2)},
     textShadowRadius: moderateScale(5),
   },
   title: {
     fontSize: moderateScale(26),
     fontWeight: '700',
-    color: colors.backgroundWhite,
+    color: colors.white,
     textAlign: 'center',
     marginVertical: moderateHeight(8),
-    textShadowColor: colors.textShadow,
+    textShadowColor: colors.primaryDark,
     textShadowOffset: {width: 0, height: moderateScale(2)},
     textShadowRadius: moderateScale(4),
   },
   subtitle: {
     fontSize: moderateScale(18),
-    color: colors.backgroundWhite,
+    color: colors.white,
     textAlign: 'center',
     marginHorizontal: moderateWidth(20),
-    lineHeight: moderateScale(22),
-    textShadowColor: colors.textShadow,
+    textShadowColor: colors.primaryDark,
     textShadowOffset: {width: 0, height: moderateScale(2)},
     textShadowRadius: moderateScale(4),
   },

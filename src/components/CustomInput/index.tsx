@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    color: colors.white,
   },
   textInput: {
     flexDirection: 'row',
