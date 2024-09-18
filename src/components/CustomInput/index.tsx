@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   TextInput,
   View,
   TouchableOpacity,
-  TextInputProps,
   StyleProp,
   TextStyle,
   KeyboardTypeOptions,
@@ -71,8 +70,17 @@ const CustomInput: React.FC<CustomInputProps> = ({
   editable,
   color = 'black',
 }) => {
+  const [borderColor, setBorderColor] = useState<string>(colors.white);
+
+  const handleFocus = () => {
+    setBorderColor(colors.white);
+  };
+  const handleBlur = () => {
+    setBorderColor(colors.lightGray);
+  };
+
   return (
-    <View style={styles.textInput}>
+    <View style={[styles.textInput, {borderColor: borderColor}]}>
       <TextInput
         placeholder={placeholder}
         style={[styles.inputStyle, inputStyle]}
@@ -89,6 +97,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
         numberOfLines={numberOfLines}
         textAlignVertical={textAlignVertical}
         editable={editable}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
       {!!rightIcon && (
         <View style={styles.rightIconContainer}>
@@ -127,7 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: moderateScale(343),
     paddingHorizontal: moderateScale(12),
-    borderColor: colors.white,
   },
   rightIconContainer: {
     marginRight: moderateScale(8),

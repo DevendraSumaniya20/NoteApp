@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationProps} from '../../navigation/AppNavigator';
 import {moderateHeight, moderateScale} from '../../utils/responsive';
 import colors from '../../theme/colors';
 import {CustomButton, CustomInput, CustomText} from '../../components';
-import {Text} from 'react-native';
 
 interface LoginScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'Login'>;
@@ -17,6 +16,10 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
   const [password, setPassword] = useState<string>('');
 
   const isButtonDisabled = !(email && password);
+
+  const handleSignUp = () => {
+    navigation.navigate('SignUp');
+  };
 
   return (
     <LinearGradient
@@ -38,7 +41,7 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
             placeholderTextColor={colors.white}
           />
           <CustomInput
-            placeholder="Enter Password"
+            placeholder="Enter Password "
             rightIcon="eye-outline"
             rightIconType="Ionicons"
             color={colors.white}
@@ -68,7 +71,11 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
 
         <View style={styles.signUpContainer}>
           <Text style={styles.accountText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => {}} style={styles.signUpButton}>
+          <TouchableOpacity
+            onPress={() => {
+              handleSignUp();
+            }}
+            style={styles.signUpButton}>
             <Text style={styles.signUpButtonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -85,11 +92,11 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    justifyContent: 'center',
     marginHorizontal: moderateScale(16),
   },
   loginTextContainer: {
     alignItems: 'center',
+    marginTop: moderateHeight(16),
   },
   loginText: {
     fontSize: moderateScale(24),
@@ -100,12 +107,12 @@ const styles = StyleSheet.create({
     textShadowRadius: moderateScale(4),
   },
   inputContainer: {
-    marginVertical: moderateScale(16),
+    marginTop: moderateHeight(16),
     gap: 26,
   },
   buttonContainer: {
     alignItems: 'center',
-    marginVertical: moderateScale(16),
+    marginTop: moderateHeight(8),
   },
   forgotPasswordContainer: {
     alignItems: 'flex-end',
@@ -123,8 +130,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
-    marginVertical: moderateHeight(8),
+    gap: 6,
+    marginVertical: moderateHeight(16),
   },
   accountText: {
     fontSize: moderateScale(16),

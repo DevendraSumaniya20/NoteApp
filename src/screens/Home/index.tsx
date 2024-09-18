@@ -2,18 +2,34 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationProps} from '../../navigation/AppNavigator';
+import LinearGradient from 'react-native-linear-gradient';
+import colors from '../../theme/colors';
+import {moderateHeight, moderateScale} from '../../utils/responsive';
+import {CustomHeader} from '../../components';
 interface HomeScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'Home'>;
 }
 
-const Home = ({navigation}: HomeScreenProps) => {
+const Home: React.FC<HomeScreenProps> = ({navigation}) => {
   return (
-    <View>
-      <Text>index</Text>
-    </View>
+    <LinearGradient
+      colors={[colors.neonBlue, colors.neonRed]}
+      style={styles.container}>
+      <View style={styles.marginContainer}>
+        <View
+          style={{
+            marginTop: moderateScale(16),
+          }}>
+          <CustomHeader />
+        </View>
+      </View>
+    </LinearGradient>
   );
 };
 
 export default Home;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {flex: 1},
+  marginContainer: {marginHorizontal: moderateScale(16)},
+});
