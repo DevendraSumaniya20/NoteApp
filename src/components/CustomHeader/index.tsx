@@ -31,17 +31,19 @@ interface CustomHeaderProps {
   IconColor?: string;
   size?: number;
   onPress?: () => void;
+  style?: any;
 }
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({
   IconName = 'left',
   iconType = 'AntDesign',
   IconColor = colors.black,
-  size = moderateScale(16),
+  size = moderateScale(26),
   onPress = () => {},
+  style = {},
 }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={style}>
       <CustomIcon
         name={IconName}
         type={iconType}

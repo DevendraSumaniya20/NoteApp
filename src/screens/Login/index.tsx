@@ -5,7 +5,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationProps} from '../../navigation/AppNavigator';
 import {moderateHeight, moderateScale} from '../../utils/responsive';
 import colors from '../../theme/colors';
-import {CustomButton, CustomInput, CustomText} from '../../components';
+import {
+  CustomButton,
+  CustomInput,
+  CustomLoader,
+  CustomText,
+} from '../../components';
+import Toast from 'react-native-toast-message';
+import config from '../../config/config';
 
 interface LoginScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'Login'>;
@@ -14,8 +21,59 @@ interface LoginScreenProps {
 const Login: React.FC<LoginScreenProps> = ({navigation}) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const isButtonDisabled = !(email && password);
+
+  const handleLogin = async () => {
+    console.log('Attempting to log in with email:', email);
+
+    if (!email || !password) {
+      Toast.show({
+        type: 'error',
+        text1: 'Login Error',
+        text2: 'Please enter both email and password',
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${config.baseUrl}${config.endpoints.login}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email, password}),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        Toast.show({
+          type: 'success',
+          text1: 'Login Successful',
+          text2: `Welcome back, ${email}!`,
+        });
+        console.log('Navigating with ID: ', data._id);
+        navigation.navigate('Home', {id: data._id});
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Login Failed',
+          text2: data.message || 'Invalid credentials',
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network Error',
+        text2: 'Please try again later.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSignUp = () => {
     navigation.navigate('SignUp');
@@ -25,6 +83,8 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
     <LinearGradient
       colors={[colors.neonBlue, colors.neonRed]}
       style={styles.container}>
+      <CustomLoader visible={loading} />
+
       <View style={styles.innerContainer}>
         <CustomText
           text="Login"
@@ -35,34 +95,33 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
         <View style={styles.inputContainer}>
           <CustomInput
             placeholder="Enter Email"
-            autoFocus={true}
+            autoFocus
             keyboardType="email-address"
-            onChangeText={(text: string) => setEmail(text)}
+            onChangeText={setEmail}
             placeholderTextColor={colors.white}
           />
           <CustomInput
-            placeholder="Enter Password "
+            placeholder="Enter Password"
             rightIcon="eye-outline"
             rightIconType="Ionicons"
-            color={colors.white}
-            keyboardType="default"
-            onChangeText={(text: string) => setPassword(text)}
+            onChangeText={setPassword}
             secureTextEntry
             placeholderTextColor={colors.white}
+            color={colors.white}
           />
         </View>
 
         <View style={styles.buttonContainer}>
           <CustomButton
             title="Login"
-            onPress={() => console.log('Login Button Pressed')}
-            disabled={isButtonDisabled}
+            onPress={handleLogin}
+            disabled={isButtonDisabled || loading}
           />
         </View>
 
         <View style={styles.forgotPasswordContainer}>
           <CustomText
-            text="Forgot Password ?"
+            text="Forgot Password?"
             textStyle={styles.forgotPasswordText}
             pressable
             onPress={() => console.log('Forgot Password Pressed')}
@@ -71,11 +130,7 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
 
         <View style={styles.signUpContainer}>
           <Text style={styles.accountText}>Don't have an account?</Text>
-          <TouchableOpacity
-            onPress={() => {
-              handleSignUp();
-            }}
-            style={styles.signUpButton}>
+          <TouchableOpacity onPress={handleSignUp}>
             <Text style={styles.signUpButtonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -137,7 +192,6 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     color: colors.white,
   },
-  signUpButton: {},
   signUpButtonText: {
     color: colors.lavender,
     fontSize: moderateScale(16),

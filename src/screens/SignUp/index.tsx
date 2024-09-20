@@ -4,27 +4,90 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationProps} from '../../navigation/AppNavigator';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../theme/colors';
-import {CustomButton, CustomInput, CustomText} from '../../components';
+import {
+  CustomButton,
+  CustomInput,
+  CustomLoader,
+  CustomText,
+} from '../../components';
 import {moderateHeight, moderateScale} from '../../utils/responsive';
+import Toast from 'react-native-toast-message';
+import config from '../../config/config';
 
 interface SignUpScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'SignUp'>;
 }
 
 const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
+  const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const isButtonDisabled = !(email && password);
+  const isButtonDisabled = !(name && email && password);
 
   const handleLogin = () => {
     navigation.navigate('Login');
+  };
+
+  const handleSignUp = async () => {
+    if (isButtonDisabled) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Information',
+        text2: 'Please fill in all the fields',
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${config.baseUrl}${config.endpoints.register}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email, password, name}),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        Toast.show({
+          type: 'success',
+          text1: 'Sign Up Successful',
+          text2: `Welcome, ${name}!`,
+        });
+        setName('');
+        setEmail('');
+        setPassword('');
+        console.log('Navigating with ID: ', data._id);
+        navigation.navigate('Home', {id: data._id});
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Sign Up Failed',
+          text2: data.message || 'Please try again',
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network Error',
+        text2: 'Please try again later.',
+      });
+      console.log('Error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <LinearGradient
       colors={[colors.neonBlue, colors.neonRed]}
       style={styles.container}>
+      <CustomLoader visible={loading} />
       <View style={styles.innerContainer}>
         <CustomText
           text="Sign up"
@@ -34,9 +97,9 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
 
         <View style={styles.inputContainer}>
           <CustomInput
-            placeholder="Enter UserName"
+            placeholder="Enter name"
             autoFocus={true}
-            onChangeText={(text: string) => setEmail(text)}
+            onChangeText={(text: string) => setName(text)}
             placeholderTextColor={colors.white}
           />
           <CustomInput
@@ -45,9 +108,8 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
             onChangeText={(text: string) => setEmail(text)}
             placeholderTextColor={colors.white}
           />
-
           <CustomInput
-            placeholder="Enter Password "
+            placeholder="Enter Password"
             rightIcon="eye-outline"
             rightIconType="Ionicons"
             color={colors.white}
@@ -61,18 +123,14 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
         <View style={styles.buttonContainer}>
           <CustomButton
             title="Sign up"
-            onPress={() => console.log('Sign up Button Pressed')}
-            disabled={isButtonDisabled}
+            onPress={handleSignUp}
+            disabled={isButtonDisabled || loading}
           />
         </View>
 
         <View style={styles.signUpContainer}>
-          <Text style={styles.accountText}>Already have account ?</Text>
-          <TouchableOpacity
-            onPress={() => {
-              handleLogin();
-            }}
-            style={styles.signUpButton}>
+          <Text style={styles.accountText}>Already have an account?</Text>
+          <TouchableOpacity onPress={handleLogin} style={styles.signUpButton}>
             <Text style={styles.signUpButtonText}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -111,7 +169,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: moderateHeight(8),
   },
-
   signUpContainer: {
     flexDirection: 'row',
     alignItems: 'center',

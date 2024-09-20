@@ -16,12 +16,10 @@ const Home: React.FC<HomeScreenProps> = ({navigation}) => {
       colors={[colors.neonBlue, colors.neonRed]}
       style={styles.container}>
       <View style={styles.marginContainer}>
-        <View
-          style={{
-            marginTop: moderateScale(16),
-          }}>
-          <CustomHeader />
+        <View>
+          <CustomHeader style={{marginTop: moderateHeight(8)}} />
         </View>
+        <View></View>
       </View>
     </LinearGradient>
   );
