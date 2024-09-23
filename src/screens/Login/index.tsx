@@ -56,7 +56,7 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
           text2: `Welcome back, ${email}!`,
         });
         console.log('Navigating with ID: ', data._id);
-        navigation.navigate('Home', {id: data._id});
+        navigation.navigate('BottomTab', {id: data._id});
       } else {
         Toast.show({
           type: 'error',

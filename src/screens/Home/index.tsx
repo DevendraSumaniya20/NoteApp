@@ -1,33 +1,99 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootNavigationProps} from '../../navigation/AppNavigator';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+} from 'react-native';
+import React, {useState} from 'react';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../theme/colors';
 import {moderateHeight, moderateScale} from '../../utils/responsive';
-import {CustomHeader} from '../../components';
+import {CustomHeader, CustomMargin} from '../../components';
+import {BottomTabParamList} from '../../navigation/AppNavigator';
+import MasonryList from '@react-native-seoul/masonry-list';
+
 interface HomeScreenProps {
-  navigation: StackNavigationProp<RootNavigationProps, 'Home'>;
+  navigation: BottomTabNavigationProp<BottomTabParamList, 'Home'>;
 }
 
 const Home: React.FC<HomeScreenProps> = ({navigation}) => {
+  const [data, setData] = useState<{key: string}[]>([
+    {key: 'Task 1'},
+    {key: 'Task 2'},
+    {key: 'Task 3'},
+  ]);
+
+  const renderItem = ({item}: {item: {key: string}}) => {
+    return (
+      <View style={styles.itemContainer}>
+        <Text>{item.key}</Text>
+      </View>
+    );
+  };
+
   return (
     <LinearGradient
       colors={[colors.neonBlue, colors.neonRed]}
       style={styles.container}>
-      <View style={styles.marginContainer}>
-        <View>
-          <CustomHeader style={{marginTop: moderateHeight(8)}} />
+      <CustomMargin>
+        <View style={styles.header}>
+          <Text>Hello, User</Text>
+          <TouchableOpacity>
+            <Text>bell</Text>
+          </TouchableOpacity>
         </View>
-        <View></View>
-      </View>
+        <Text>Manage Your Daily Task</Text>
+        <View style={styles.imageContainer}>
+          <Image />
+          <Image />
+          <Image />
+        </View>
+        <View style={styles.ongoingContainer}>
+          <Text>On Going</Text>
+          <TouchableOpacity>
+            <Text>See All</Text>
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.key}
+        />
+      </CustomMargin>
     </LinearGradient>
   );
 };
 
-export default Home;
-
 const styles = StyleSheet.create({
-  container: {flex: 1},
-  marginContainer: {marginHorizontal: moderateScale(16)},
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  imageContainer: {
+    marginVertical: moderateScale(10),
+  },
+  ongoingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  itemContainer: {
+    padding: moderateScale(10),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.lightGray,
+  },
+  image: {
+    width: '100%',
+    height: moderateHeight(100), // Adjust height as needed
+    marginBottom: moderateScale(5),
+  },
 });
+
+export default Home;

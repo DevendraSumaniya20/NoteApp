@@ -63,7 +63,7 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
         setEmail('');
         setPassword('');
         console.log('Navigating with ID: ', data._id);
-        navigation.navigate('Home', {id: data._id});
+        navigation.navigate('BottomTab', {id: data._id});
       } else {
         Toast.show({
           type: 'error',
