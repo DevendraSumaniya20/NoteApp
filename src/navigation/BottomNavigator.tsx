@@ -4,7 +4,6 @@ import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CustomIcon from '../components/CustomIcon';
 import {Home, Profile, Task} from '../screens';
-import {moderateHeight, moderateScale} from '../utils/responsive';
 import colors from '../theme/colors';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 
@@ -23,7 +22,7 @@ const BottomNavigator: React.FC = () => {
   const getIconName = (routeName: string, focused: boolean) => {
     const icons: Record<string, [string, string]> = {
       Home: ['home', 'home-outline'],
-      Tasks: ['checkmark-circle', 'checkmark-circle-outline'],
+      Tasks: ['add-circle', 'add-circle-outline'],
       Profile: ['person', 'person-outline'],
     };
     return focused ? icons[routeName][0] : icons[routeName][1];
@@ -35,7 +34,6 @@ const BottomNavigator: React.FC = () => {
         screenOptions={({route}) => ({
           headerShown: false,
           tabBarHideOnKeyboard: true,
-
           tabBarShowLabel: false,
           tabBarIcon: ({focused, color, size}) => (
             <CustomIcon
@@ -81,31 +79,26 @@ const BottomNavigator: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    zIndex: 0,
   },
   fab: {
-    position: 'absolute',
-    left: '50%',
-    marginLeft: -32,
-    bottom: moderateScale(36),
-    backgroundColor: colors.brightOrange,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: colors.neonRed_80,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: moderateScale(32),
-    elevation: 8,
-    alignSelf: 'center',
-    padding: moderateScale(16),
+    top: -35,
+    borderColor: colors.white,
+    borderWidth: 2,
   },
   tabBar: {
-    backgroundColor: colors.lavender_80,
+    backgroundColor: 'white',
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: moderateHeight(-2),
-    height: moderateHeight(10),
-    paddingBottom: moderateHeight(2),
-    borderTopRightRadius: moderateScale(16),
-    borderTopLeftRadius: moderateScale(16),
+    bottom: 0,
+    borderTopWidth: 0,
+    elevation: 0,
   },
 });
 
