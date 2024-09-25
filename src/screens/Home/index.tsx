@@ -4,10 +4,10 @@ import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../theme/colors';
 import {moderateHeight, moderateScale} from '../../utils/responsive';
-import {CustomMargin} from '../../components';
+import {CustomMargin, GradientComponent} from '../../components';
 import {BottomTabParamList} from '../../navigation/AppNavigator';
 import CustomIcon from '../../components/CustomIcon';
-import {BlurView} from '@react-native-community/blur';
+import {generateRandomLinearGradient} from '../../constants/LinearColorFn';
 
 interface HomeScreenProps {
   navigation: BottomTabNavigationProp<BottomTabParamList, 'Home'>;
@@ -110,14 +110,17 @@ const Home: React.FC<HomeScreenProps> = ({navigation}) => {
   };
 
   return (
-    <LinearGradient
-      colors={[colors.darkGray_80, colors.lavender_60]}
-      style={styles.container}>
+    <GradientComponent>
       <CustomMargin>
         <View style={styles.header}>
           <Text style={styles.headerText}>Hello, User</Text>
-          <TouchableOpacity>
-            <Text style={styles.iconText}>🔔</Text>
+          <TouchableOpacity onPress={() => {}}>
+            <CustomIcon
+              name="bell-outline"
+              size={24}
+              color={colors.white}
+              type="MaterialCommunityIcons"
+            />
           </TouchableOpacity>
         </View>
 
@@ -151,21 +154,15 @@ const Home: React.FC<HomeScreenProps> = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        {/* Add BlurView here */}
-        <BlurView
-          style={styles.blurContainer}
-          blurType="light"
-          blurAmount={10}
-          reducedTransparencyFallbackColor="white">
-          <FlatList
-            data={demo}
-            renderItem={getDemo}
-            keyExtractor={item => item.id.toString()}
-            showsVerticalScrollIndicator={false}
-          />
-        </BlurView>
+        <FlatList
+          data={demo}
+          renderItem={getDemo}
+          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          style={{marginBottom: moderateScale(370)}}
+        />
       </CustomMargin>
-    </LinearGradient>
+    </GradientComponent>
   );
 };
 
@@ -224,10 +221,11 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     padding: moderateScale(20),
-    backgroundColor: colors.black,
     borderRadius: moderateScale(16),
     marginVertical: moderateScale(8),
     flexDirection: 'row',
+    borderColor: colors.darkGray_80,
+    borderWidth: moderateScale(1),
   },
   textContainer: {
     flex: 1,

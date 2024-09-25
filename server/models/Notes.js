@@ -16,6 +16,20 @@ const NotesSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    status: {
+      type: String,
+      enum: ['Pending', 'In Progress', 'Completed'],
+      required: true,
+      default: 'Pending',
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    endDate: {
+      type: Date,
+      required: true,
+    },
     postedBy: {
       type: String,
       minlength: 5,

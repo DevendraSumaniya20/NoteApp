@@ -2,63 +2,78 @@ const router = require('express').Router();
 const Note = require('../models/Notes');
 const User = require('../models/User');
 
-//create Note
-
+// Create Note
 router.post('/addNote', async (req, res) => {
   try {
+    const {title, description, postedBy, startDate, endDate} = req.body;
+
+    // Validate required fields
+    if (!title || !description || !postedBy || !startDate || !endDate) {
+      return res.status(400).json({message: 'All fields are required.'});
+    }
+
     const note = new Note({
-      title: req.body.title,
-      description: req.body.description,
-      postedBy: req.body.postedBy,
+      title,
+      description,
+      postedBy,
+      startDate,
+      endDate,
     });
 
     const data = await note.save();
-    res.status(200).json(data);
+    res.status(201).json(data);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({error: error.message});
   }
 });
 
-//delete Note
-
+// Delete Note
 router.delete('/deleteNote/:id', async (req, res) => {
   try {
-    const notes = await Note.findOne({_id: req.params.id});
-    !notes && res.status(401).json({message: 'Note not found', status: false});
-    const note = await Note.deleteOne({_id: req.params.id});
+    const note = await Note.findById(req.params.id);
+    if (!note) {
+      return res.status(404).json({message: 'Note not found', status: false});
+    }
+
+    await Note.deleteOne({_id: req.params.id});
     res.status(200).json({message: 'Note Deleted Successfully', status: true});
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({error: error.message});
   }
 });
 
-//Update notes
-
+// Update Note
 router.put('/updateNote/:id', async (req, res) => {
   try {
-    const notes = await Note.findOne({_id: req.params.id});
-    !notes && res.status(401).json({message: 'Note not found', status: false});
-    const note = await Note.updateOne({
-      title: req.body.title,
-      description: req.body.description,
-      postedBy: req.body.postedBy,
-    });
+    const note = await Note.findById(req.params.id);
+    if (!note) {
+      return res.status(404).json({message: 'Note not found', status: false});
+    }
+
+    // Update fields only if they are provided in the request body
+    const updatedData = {
+      title: req.body.title || note.title,
+      description: req.body.description || note.description,
+      postedBy: req.body.postedBy || note.postedBy,
+      startDate: req.body.startDate || note.startDate,
+      endDate: req.body.endDate || note.endDate,
+    };
+
+    await Note.updateOne({_id: req.params.id}, updatedData);
     res.status(200).json({message: 'Note updated Successfully', status: true});
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({error: error.message});
   }
 });
 
 // Get all notes by userId
 router.get('/getNotes/:userId', async (req, res) => {
   try {
-    // Fetch the user by the provided userId parameter
     const currentUser = await User.findById(req.params.userId);
     if (!currentUser) {
-      return res.status(400).json({data: 'User not found'});
+      return res.status(404).json({message: 'User not found'});
     }
 
-    // Fetch notes posted by the userId
     const notes = await Note.find({postedBy: req.params.userId});
     res.status(200).json(notes);
   } catch (error) {

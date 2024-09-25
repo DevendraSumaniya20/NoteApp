@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: moderateScale(16),
     marginBottom: moderateScale(8),
-    color: colors.darkGray,
+    color: colors.white,
   },
   inputContainer: {
     flexDirection: 'row',

@@ -9,10 +9,12 @@ import {
   CustomInput,
   CustomLoader,
   CustomText,
+  GradientComponent,
 } from '../../components';
 import {moderateHeight, moderateScale} from '../../utils/responsive';
 import Toast from 'react-native-toast-message';
 import config from '../../config/config';
+import {generateRandomLinearGradient} from '../../constants/LinearColorFn';
 
 interface SignUpScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'SignUp'>;
@@ -84,9 +86,7 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
   };
 
   return (
-    <LinearGradient
-      colors={[colors.neonBlue, colors.neonRed]}
-      style={styles.container}>
+    <GradientComponent>
       <CustomLoader visible={loading} />
       <View style={styles.innerContainer}>
         <CustomText
@@ -135,7 +135,7 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-    </LinearGradient>
+    </GradientComponent>
   );
 };
 

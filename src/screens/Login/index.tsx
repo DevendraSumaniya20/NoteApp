@@ -10,9 +10,11 @@ import {
   CustomInput,
   CustomLoader,
   CustomText,
+  GradientComponent,
 } from '../../components';
 import Toast from 'react-native-toast-message';
 import config from '../../config/config';
+import {generateRandomLinearGradient} from '../../constants/LinearColorFn';
 
 interface LoginScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'Login'>;
@@ -80,9 +82,7 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
   };
 
   return (
-    <LinearGradient
-      colors={[colors.neonBlue, colors.neonRed]}
-      style={styles.container}>
+    <GradientComponent>
       <CustomLoader visible={loading} />
 
       <View style={styles.innerContainer}>
@@ -135,7 +135,7 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-    </LinearGradient>
+    </GradientComponent>
   );
 };
 

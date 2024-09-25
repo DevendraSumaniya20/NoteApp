@@ -14,15 +14,20 @@ export default {
   backgroundSecondary: '#f8f8f8',
   backgroundAccent: '#eeeeee',
 
-  // Primary colors
-  primary: '#007bff',
-  primaryLight: '#66b3ff',
-  primaryDark: '#0056b3',
+  // Primary color (main theme)
+  primary: '#1565C0', // Deep Blue as the main primary color
+  primaryLight: '#5e92f3', // Lighter shade of primary
+  primaryDark: '#003c8f', // Darker shade of primary
 
-  // Secondary colors
-  secondary: '#6c757d',
-  secondaryLight: '#9ba1a7',
-  secondaryDark: '#4e5d6b',
+  // Secondary color
+  secondary: '#b92b27', // Strong red as secondary color
+  secondaryLight: '#ff5f52',
+  secondaryDark: '#7f0000',
+
+  // Gradient colors (alternative for backgrounds, buttons, etc.)
+  gradientDark: '#0F2027', // Darker shade
+  gradientMid: '#203A43', // Mid tone
+  gradientLight: '#2C5364', // Lighter shade of the gradient
 
   // Neon colors
   neonBlue: '#7DF9FF',
@@ -35,11 +40,21 @@ export default {
   neonCyan: '#00FFFF',
   neonRed: '#FF073A',
 
+  // Additional beautiful colors
+  softPeach: '#FFCCBC',
+  lavenderBlush: '#FFF0F5',
+  skyBlue: '#87CEEB',
+  mintCream: '#F5FFFA',
+  paleGoldenrod: '#EEE8AA',
+  lightCoral: '#F08080',
+  lightSeaGreen: '#20B2AA',
+  thistle: '#D8BFD8',
+  lightSlateGray: '#778899',
+  lightSteelBlue: '#B0C4DE',
+
   // Opacity variations for neon colors
   neonBlue_80: 'rgba(125, 249, 255, 0.8)',
   neonBlue_60: 'rgba(125, 249, 255, 0.6)',
-  neonGreen_80: 'rgba(57, 255, 20, 0.8)',
-  neonGreen_60: 'rgba(57, 255, 20, 0.6)',
   hotPink_80: 'rgba(255, 105, 180, 0.8)',
   hotPink_60: 'rgba(255, 105, 180, 0.6)',
   neonYellow_80: 'rgba(255, 255, 51, 0.8)',
@@ -76,4 +91,28 @@ export default {
   coral_60: 'rgba(255, 111, 97, 0.6)',
   lavender_80: 'rgba(230, 230, 250, 0.8)',
   lavender_60: 'rgba(230, 230, 250, 0.6)',
+
+  // White opacity variations
+  white_10: 'rgba(255, 255, 255, 0.1)',
+  white_20: 'rgba(255, 255, 255, 0.2)',
+  white_30: 'rgba(255, 255, 255, 0.3)',
+  white_40: 'rgba(255, 255, 255, 0.4)',
+  white_50: 'rgba(255, 255, 255, 0.5)',
+  white_60: 'rgba(255, 255, 255, 0.6)',
+  white_70: 'rgba(255, 255, 255, 0.7)',
+  white_80: 'rgba(255, 255, 255, 0.8)',
+  white_90: 'rgba(255, 255, 255, 0.9)',
+  white_100: 'rgba(255, 255, 255, 1)',
+
+  // Black opacity variations
+  black_10: 'rgba(0, 0, 0, 0.1)',
+  black_20: 'rgba(0, 0, 0, 0.2)',
+  black_30: 'rgba(0, 0, 0, 0.3)',
+  black_40: 'rgba(0, 0, 0, 0.4)',
+  black_50: 'rgba(0, 0, 0, 0.5)',
+  black_60: 'rgba(0, 0, 0, 0.6)',
+  black_70: 'rgba(0, 0, 0, 0.7)',
+  black_80: 'rgba(0, 0, 0, 0.8)',
+  black_90: 'rgba(0, 0, 0, 0.9)',
+  black_100: 'rgba(0, 0, 0, 1)',
 };

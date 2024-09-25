@@ -1,4 +1,3 @@
-// src/config.ts
 import {Platform} from 'react-native';
 
 const baseUrl =
@@ -12,9 +11,14 @@ export default {
     logout: '/api/auth/logout',
     changePassword: '/api/auth/change_password',
     forgotPassword: '/api/auth/forgot_password',
-    getNote: 'api/notes/getNotes',
-    addNote: 'api/notes/addNote',
-    updateNote: 'api/notes/updateNote',
-    deleteNote: 'api/notes/deleteNote',
+    getNotes: '/api/notes/getNotes',
+    addNote: '/api/notes/addNote',
+    updateNote: '/api/notes/updateNote',
+    deleteNote: '/api/notes/deleteNote',
+    // Task endpoints
+    // getTasks: '/api/tasks/getTasks', // Add this endpoint
+    // addTask: '/api/tasks/addTask', // Add this endpoint
+    // updateTask: '/api/tasks/updateTask', // Add this endpoint
+    // deleteTask: '/api/tasks/deleteTask', // Add this endpoint
   },
 };
