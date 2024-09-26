@@ -1,10 +1,11 @@
-import noteReducer from '../slices/noteSlice';
-
 import {combineReducers} from '@reduxjs/toolkit';
+import noteReducer from '../slices/noteSlice';
+import authReducer from '../slices/authSlice';
 
 const rootReducer = combineReducers({
-  notes: noteReducer, // Note that we are naming this 'notes'
-  // Add other reducers here as needed
+  notes: noteReducer,
+  auth: authReducer,
+  // You can add more slices here when needed
 });
 
 export default rootReducer;

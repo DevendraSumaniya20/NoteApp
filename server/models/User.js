@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
+const {v4: uuidv4} = require('uuid'); // Import uuid
 
+// Define the User schema
 const UserSchema = new mongoose.Schema(
   {
+    // Auto-generated ID for the user
+    id: {
+      type: String,
+      default: uuidv4, // Automatically generate a new UUID for each user
+      unique: true,
+    },
     name: {
       type: String,
       minlength: 4,
@@ -26,7 +34,8 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
   },
-  {timestamps: true},
+  {timestamps: true}, // Automatically add createdAt and updatedAt fields
 );
 
+// Export the User model
 module.exports = mongoose.model('User', UserSchema);

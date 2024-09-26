@@ -26,13 +26,42 @@ mongoose
     console.log('MongoDB connected');
   })
   .catch(err => {
-    console.log('Error connecting to MongoDB:', err.message);
+    console.error('Error connecting to MongoDB:', err.message);
+    process.exit(1); // Exit process if unable to connect
   });
 
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/notes', notesRouter);
 
-app.listen(port, () => {
+// Centralized Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error stack
+  res.status(500).json({error: 'Something went wrong!'});
+});
+
+// Graceful Shutdown
+const server = app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+});
+
+// Handle shutdown gracefully
+process.on('SIGINT', () => {
+  console.log('Shutting down gracefully...');
+  server.close(() => {
+    mongoose.connection.close(() => {
+      console.log('MongoDB connection closed');
+      process.exit(0);
+    });
+  });
+});
+
+process.on('SIGTERM', () => {
+  console.log('Shutting down gracefully...');
+  server.close(() => {
+    mongoose.connection.close(() => {
+      console.log('MongoDB connection closed');
+      process.exit(0);
+    });
+  });
 });

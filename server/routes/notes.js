@@ -2,71 +2,95 @@ const router = require('express').Router();
 const Note = require('../models/Notes');
 const User = require('../models/User');
 
-// Create Note
 router.post('/addNote', async (req, res) => {
   try {
-    const {title, description, postedBy, startDate, endDate} = req.body;
+    const {title, description, startDate, endDate, status, userId} = req.body;
 
-    // Validate required fields
-    if (!title || !description || !postedBy || !startDate || !endDate) {
+    if (
+      !title ||
+      !description ||
+      !startDate ||
+      !endDate ||
+      !status ||
+      !userId
+    ) {
       return res.status(400).json({message: 'All fields are required.'});
+    }
+
+    if (new Date(startDate) >= new Date(endDate)) {
+      return res
+        .status(400)
+        .json({message: 'End date must be after start date.'});
     }
 
     const note = new Note({
       title,
       description,
-      postedBy,
       startDate,
       endDate,
+      status,
+      userId,
     });
 
     const data = await note.save();
-    res.status(201).json(data);
+    res.status(201).json({message: 'Note created successfully', note: data});
   } catch (error) {
+    console.error(error);
     res.status(500).json({error: error.message});
   }
 });
 
-// Delete Note
 router.delete('/deleteNote/:id', async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
     if (!note) {
-      return res.status(404).json({message: 'Note not found', status: false});
+      return res.status(404).json({message: 'Note not found'});
     }
 
     await Note.deleteOne({_id: req.params.id});
-    res.status(200).json({message: 'Note Deleted Successfully', status: true});
+    res.status(200).json({message: 'Note deleted successfully'});
   } catch (error) {
+    console.error(error);
     res.status(500).json({error: error.message});
   }
 });
 
-// Update Note
 router.put('/updateNote/:id', async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
     if (!note) {
-      return res.status(404).json({message: 'Note not found', status: false});
+      return res.status(404).json({message: 'Note not found'});
     }
 
-    // Update fields only if they are provided in the request body
     const updatedData = {
       title: req.body.title || note.title,
       description: req.body.description || note.description,
-      postedBy: req.body.postedBy || note.postedBy,
       startDate: req.body.startDate || note.startDate,
       endDate: req.body.endDate || note.endDate,
+      status: req.body.status || note.status,
+      userId: note.userId,
     };
 
-    await Note.updateOne({_id: req.params.id}, updatedData);
-    res.status(200).json({message: 'Note updated Successfully', status: true});
+    if (new Date(updatedData.startDate) >= new Date(updatedData.endDate)) {
+      return res
+        .status(400)
+        .json({message: 'End date must be after start date.'});
+    }
+
+    const updatedNote = await Note.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      {new: true},
+    );
+    res
+      .status(200)
+      .json({message: 'Note updated successfully', note: updatedNote});
   } catch (error) {
+    console.error(error);
     res.status(500).json({error: error.message});
   }
 });
 
-// Get all notes by userId
 router.get('/getNotes/:userId', async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId);
@@ -74,9 +98,10 @@ router.get('/getNotes/:userId', async (req, res) => {
       return res.status(404).json({message: 'User not found'});
     }
 
-    const notes = await Note.find({postedBy: req.params.userId});
+    const notes = await Note.find({userId: req.params.userId});
     res.status(200).json(notes);
   } catch (error) {
+    console.error(error);
     res.status(500).json({error: error.message});
   }
 });

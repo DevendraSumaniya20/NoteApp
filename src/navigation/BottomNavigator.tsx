@@ -3,13 +3,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CustomIcon from '../components/CustomIcon';
-import {Home, Profile, Task} from '../screens';
+import {Home, Notes, Profile} from '../screens';
 import colors from '../theme/colors';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 
 type TabParamList = {
   Home: undefined;
-  Tasks: undefined;
+  Notes: undefined;
   Profile: undefined;
 };
 
@@ -22,7 +22,7 @@ const BottomNavigator: React.FC = () => {
   const getIconName = (routeName: string, focused: boolean) => {
     const icons: Record<string, [string, string]> = {
       Home: ['home', 'home-outline'],
-      Tasks: ['add-circle', 'add-circle-outline'],
+      Notes: ['add-circle', 'add-circle-outline'],
       Profile: ['person', 'person-outline'],
     };
     return focused ? icons[routeName][0] : icons[routeName][1];
@@ -57,14 +57,14 @@ const BottomNavigator: React.FC = () => {
         }}>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen
-          name="Tasks"
-          component={Task}
+          name="Notes"
+          component={Notes}
           options={{
             tabBarButton: props => (
               <TouchableOpacity
                 {...props}
                 style={styles.fab}
-                onPress={() => navigation.navigate('Tasks')}>
+                onPress={() => navigation.navigate('Notes')}>
                 <CustomIcon name="add" color="white" size={24} />
               </TouchableOpacity>
             ),

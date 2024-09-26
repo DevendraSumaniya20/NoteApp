@@ -10,14 +10,14 @@ export type RootNavigationProps = {
   Login: undefined;
   Splash: undefined;
   BottomTab: undefined;
-  Tasks: undefined;
+  Notes: undefined;
   Profile: undefined;
   Home: undefined;
 };
 
 export type BottomTabParamList = {
   Home: undefined;
-  Tasks: undefined;
+  Notes: undefined;
   Profile: undefined;
 };
 
@@ -33,8 +33,8 @@ const AppNavigator: React.FC = () => {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="BottomTab" component={BottomNavigator} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Splash" component={Splash} />
       </Stack.Navigator>
     </NavigationContainer>
   );

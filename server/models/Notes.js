@@ -30,11 +30,10 @@ const NotesSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    postedBy: {
-      type: String,
-      minlength: 5,
-      maxlength: 50,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: 'User',
     },
   },
   {timestamps: true},

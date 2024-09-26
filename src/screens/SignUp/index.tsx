@@ -2,7 +2,6 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationProps} from '../../navigation/AppNavigator';
-import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../theme/colors';
 import {
   CustomButton,
@@ -13,18 +12,19 @@ import {
 } from '../../components';
 import {moderateHeight, moderateScale} from '../../utils/responsive';
 import Toast from 'react-native-toast-message';
-import config from '../../config/config';
-import {generateRandomLinearGradient} from '../../constants/LinearColorFn';
+import {useAppDispatch, useAppSelector} from '../../hooks/hooks'; // Use your hook to access Redux
+import {registerUser, selectAuth} from '../../redux/slices/authSlice';
 
 interface SignUpScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'SignUp'>;
 }
 
 const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
+  const dispatch = useAppDispatch();
+  const {loading, error} = useAppSelector(selectAuth);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
 
   const isButtonDisabled = !(name && email && password);
 
@@ -42,46 +42,35 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
       return;
     }
 
-    setLoading(true);
-
     try {
-      const res = await fetch(`${config.baseUrl}${config.endpoints.register}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email, password, name}),
-      });
+      console.log('Attempting to register with:', {name, email, password});
+      const res = await dispatch(registerUser({email, password, name}));
 
-      const data = await res.json();
+      console.log('Register response:', res);
 
-      if (res.ok) {
+      if (res.meta.requestStatus === 'fulfilled') {
         Toast.show({
           type: 'success',
-          text1: 'Sign Up Successful',
+          text1: 'Registration Successful',
           text2: `Welcome, ${name}!`,
         });
-        setName('');
-        setEmail('');
-        setPassword('');
-        console.log('Navigating with ID: ', data._id);
-        navigation.navigate('BottomTab', {id: data._id});
+        console.log('Navigating with ID: ', res.payload._id);
+        navigation.navigate('BottomTab', {id: res.payload._id});
       } else {
         Toast.show({
           type: 'error',
-          text1: 'Sign Up Failed',
-          text2: data.message || 'Please try again',
+          text1: 'Registration Failed',
+          text2: error || 'Something went wrong!',
         });
+        console.warn('Registration failed:', error);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Network Error:', err);
       Toast.show({
         type: 'error',
         text1: 'Network Error',
         text2: 'Please try again later.',
       });
-      console.log('Error:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -90,14 +79,14 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
       <CustomLoader visible={loading} />
       <View style={styles.innerContainer}>
         <CustomText
-          text="Sign up"
+          text="Sign Up"
           containerStyle={styles.loginTextContainer}
           textStyle={styles.loginText}
         />
 
         <View style={styles.inputContainer}>
           <CustomInput
-            placeholder="Enter name"
+            placeholder="Enter Name"
             autoFocus={true}
             onChangeText={(text: string) => setName(text)}
             placeholderTextColor={colors.white}
@@ -113,7 +102,6 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
             rightIcon="eye-outline"
             rightIconType="Ionicons"
             color={colors.white}
-            keyboardType="default"
             onChangeText={(text: string) => setPassword(text)}
             secureTextEntry
             placeholderTextColor={colors.white}
@@ -122,7 +110,7 @@ const SignUp: React.FC<SignUpScreenProps> = ({navigation}) => {
 
         <View style={styles.buttonContainer}>
           <CustomButton
-            title="Sign up"
+            title="Sign Up"
             onPress={handleSignUp}
             disabled={isButtonDisabled || loading}
           />

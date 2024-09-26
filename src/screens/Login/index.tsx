@@ -13,17 +13,19 @@ import {
   GradientComponent,
 } from '../../components';
 import Toast from 'react-native-toast-message';
-import config from '../../config/config';
-import {generateRandomLinearGradient} from '../../constants/LinearColorFn';
+// import {useDispatch, useSelector} from 'react-redux';
+import {loginUser, selectAuth} from '../../redux/slices/authSlice';
+import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 
 interface LoginScreenProps {
   navigation: StackNavigationProp<RootNavigationProps, 'Login'>;
 }
 
 const Login: React.FC<LoginScreenProps> = ({navigation}) => {
+  const dispatch = useAppDispatch();
+  const {loading, error, isAuthenticated, user} = useAppSelector(selectAuth);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
 
   const isButtonDisabled = !(email && password);
 
@@ -36,48 +38,45 @@ const Login: React.FC<LoginScreenProps> = ({navigation}) => {
         text1: 'Login Error',
         text2: 'Please enter both email and password',
       });
+      console.warn('Login Error: Email or Password is empty');
       return;
     }
 
-    setLoading(true);
-
     try {
-      const res = await fetch(`${config.baseUrl}${config.endpoints.login}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email, password}),
-      });
+      // Dispatch the loginUser action
+      const res = await dispatch(loginUser({email, password}));
 
-      const data = await res.json();
-      if (res.ok) {
+      console.log('Login response:', res);
+
+      // Check if the login was successful
+      if (res.meta.requestStatus === 'fulfilled') {
         Toast.show({
           type: 'success',
           text1: 'Login Successful',
           text2: `Welcome back, ${email}!`,
         });
-        console.log('Navigating with ID: ', data._id);
-        navigation.navigate('BottomTab', {id: data._id});
+        console.log('Navigating with ID: ', res.payload._id);
+        // navigation.navigate('BottomTab', {id: res.payload._id});
       } else {
         Toast.show({
           type: 'error',
           text1: 'Login Failed',
-          text2: data.message || 'Invalid credentials',
+          text2: error || 'Invalid credentials',
         });
+        console.warn('Login failed:', error);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Network Error:', err);
       Toast.show({
         type: 'error',
         text1: 'Network Error',
         text2: 'Please try again later.',
       });
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleSignUp = () => {
+    console.log('Navigating to Sign Up screen');
     navigation.navigate('SignUp');
   };
 
